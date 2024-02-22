@@ -16,3 +16,25 @@ Tools used:
 
 - Terraform for managing AWS resource state
 - Git for version control
+
+# AWS
+
+Configure AWS access credentials:
+
+1. Open Command Line/Command Prompt
+2. Call:
+```
+aws configure
+```
+3. Input the relevant information of an authorized AWS account
+
+# Terraform
+
+Initialize Terraform resources:
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform init
+```

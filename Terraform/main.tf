@@ -1,7 +1,7 @@
 # main.tf
 
 provider "aws" {
-  region = "eu-west-1"  # specify your desired AWS region
+  region = "eu-north-1"  # specify your desired AWS region
 }
 
 resource "random_pet" "bucket_suffix" {
