@@ -19,7 +19,7 @@ Tools used:
 
 # AWS
 
-Configure AWS access credentials:
+## Configure AWS access credentials:
 
 1. Open Command Line/Command Prompt
 2. Call:
@@ -30,11 +30,34 @@ aws configure
 
 # Terraform
 
-Initialize Terraform resources:
+## Initialize Terraform resources:
 
 1. Open Command Line/Command Prompt
 2. Navigate to Terraform/ directory
 3. Call:
 ```
 terraform init
+```
+
+## Check Terraform changes before updating:
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform plan
+```
+4. Confirm whether or not logged changes are desired
+
+## Deploy Terraform changes to cloud:
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform apply
+```
+4. When prompted, input:
+```
+yes
 ```

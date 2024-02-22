@@ -5,12 +5,12 @@ provider "aws" {
 }
 
 resource "random_pet" "bucket_suffix" {
-  length    = 10  # specify the length of the random string
+  length    = 3  # specify the length of the random string
   separator = "-"
 }
 
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = "Cardalog-pictures-${random_pet.bucket_suffix.id}"  # specify a globally unique bucket name
+resource "aws_s3_bucket" "cardalog-picture-bucket" {
+  bucket = "cardalog-pictures-${random_pet.bucket_suffix.id}"  # specify a globally unique bucket name
 
   acl    = "private"  # Access Control List for the bucket, you can change it as needed
 
