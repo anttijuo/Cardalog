@@ -5,13 +5,14 @@ provider "aws" {
   alias = "dynamo"
 }
 
-resource "random_pet" "dynamo_suffix" {
-  length    = 2  # specify the length of the random string
-  separator = "-"
-}
+#resource "random_pet" "dynamo_suffix" {
+#  length    = 2  # specify the length of the random string
+#  separator = "-"
+#}
 
 resource "aws_dynamodb_table" "cardalog_card_data" {
-  name           = "cardalog-card-data-${random_pet.dynamo_suffix.id}"
+  #name           = "cardalog-card-data-${random_pet.dynamo_suffix.id}"
+  name           = "cardalog-card-data"
   billing_mode   = "PROVISIONED"  # or "PAY_PER_REQUEST" for on-demand billing
   read_capacity  = 5               # Adjust according to your read/write needs
   write_capacity = 5
