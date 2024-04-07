@@ -7,8 +7,10 @@ Initial Architecture Plan:
 
 - Image-data stored in S3
 - Text-data stored in DynamoDB
-- Lambda polls DynamoDB based on input parameters, and returns text and image data
-- Frontend stored in S3
+- Lambdas stored in separate S3
+- Lambda polls DynamoDB based on input parameters, and returns text data
+- Separate Lambda polls S3 based on input parameters, and returns matching image data
+- Frontend stored in separate S3
 - Frontend triggers Lambdas through API gateway
 
 Tools used:
