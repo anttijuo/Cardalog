@@ -18,6 +18,26 @@ Tools used:
 - Terraform for managing AWS resource state
 - Git for version control
 
+# NODE
+
+## Initialize NPM Modules
+
+NOTE: Following assumes that you have Nodejs 18 installed on your local machine
+
+1. Navigate to Node/desired lambda function
+2. Call:
+```
+npm init
+```
+3. Call:
+```
+npm install
+```
+4. Call:
+```
+npm install aws-sdk --save
+```
+
 # AWS
 
 ## Configure AWS access credentials:

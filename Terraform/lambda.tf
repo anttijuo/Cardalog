@@ -34,13 +34,13 @@ resource "aws_lambda_permission" "cardalog_s3_invoke_lambda" {
 
 data "archive_file" "cardalog_lambda_zip" {
   type        = "zip"
-  output_path = "cardalog_data_reader_function.zip"
-  source_dir  = "../Node"  # Path to the directory containing your Lambda function code
+  output_path = "cardalog_data_reader.zip"
+  source_dir  = "../Node/cardalog_data_reader"  # Path to the directory containing your Lambda function code
 }
 
 resource "aws_s3_bucket_object" "cardalog_lambda_zip_object" {
   bucket = aws_s3_bucket.cardalog_lambda_bucket.id
-  key    = "cardalog_data_reader_function.zip"
+  key    = "cardalog_data_reader.zip"
   source = data.archive_file.cardalog_lambda_zip.output_path
 }
 
@@ -50,11 +50,11 @@ resource "aws_s3_bucket_object" "cardalog_lambda_zip_object" {
 #}
 
 resource "aws_lambda_function" "cardalog_data_reader" {
-  filename         = "cardalog_data_reader_function.zip"  # path to the ZIP file containing your Lambda code
+  filename         = "cardalog_data_reader.zip"  # path to the ZIP file containing your Lambda code
   #function_name    = "cardalog_data_reader-${random_pet.lambda_suffix.id}"  # name of your Lambda function
   function_name    = "cardalog_data_reader"
   role             = aws_iam_role.cardalog_lambda_role.arn  # ARN of the IAM role associated with your Lambda function
-  handler          = "lambda_function.handler"  # name of the handler function in your Lambda code
+  handler          = "index.handler"  # name of the handler function in your Lambda code
   runtime          = "nodejs18.x"  # runtime environment for your Lambda function
   
   # Optional configuration
@@ -102,6 +102,11 @@ resource "aws_iam_policy" "cardalog_lambda_policy" {
         "logs:PutLogEvents"
       ],
       "Resource": "arn:aws:logs:*:*:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "dynamodb:GetItem",
+      "Resource": "arn:aws:dynamodb:*:*:*"
     }
   ]
 }

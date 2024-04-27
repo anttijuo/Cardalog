@@ -2,4 +2,5 @@ Terraform/.terraform/
 Terraform/.terraform.lock.hcl
 Terraform/terraform.tfstate
 Terraform/terraform.tfstate.backup
-Terraform/cardalog_data_reader_function.zip
+Terraform/cardalog_data_reader.zip
+Node/cardalog_data_reader/node_modules
