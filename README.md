@@ -7,14 +7,36 @@ Initial Architecture Plan:
 
 - Image-data stored in S3
 - Text-data stored in DynamoDB
-- Lambda polls DynamoDB based on input parameters, and returns text and image data
-- Frontend stored in S3
+- Lambdas stored in separate S3
+- Lambda polls DynamoDB based on input parameters, and returns text data
+- Separate Lambda polls S3 based on input parameters, and returns matching image data
+- Frontend stored in separate S3
 - Frontend triggers Lambdas through API gateway
 
 Tools used:
 
 - Terraform for managing AWS resource state
 - Git for version control
+
+# NODE
+
+## Initialize NPM Modules
+
+NOTE: Following assumes that you have Nodejs 18 installed on your local machine
+
+1. Navigate to Node/desired lambda function
+2. Call:
+```
+npm init
+```
+3. Call:
+```
+npm install
+```
+4. Call:
+```
+npm install aws-sdk --save
+```
 
 # AWS
 
