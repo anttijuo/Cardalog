@@ -7,7 +7,8 @@ exports.handler = async (event) => {
         const params = {
             TableName: 'cardalog-card-data',
             Key: {
-                primaryKeyCardalog: 'testorino'
+                //primaryKeyCardalog: 'testorino'
+                primaryKeyCardalog: event.itemName
             }
         };
 

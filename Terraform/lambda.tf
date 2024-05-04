@@ -38,7 +38,7 @@ data "archive_file" "cardalog_lambda_zip" {
   source_dir  = "../Node/cardalog_data_reader"  # Path to the directory containing your Lambda function code
 }
 
-resource "aws_s3_bucket_object" "cardalog_lambda_zip_object" {
+resource "aws_s3_object" "cardalog_lambda_zip_object" {
   bucket = aws_s3_bucket.cardalog_lambda_bucket.id
   key    = "cardalog_data_reader.zip"
   source = data.archive_file.cardalog_lambda_zip.output_path
