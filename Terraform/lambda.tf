@@ -38,7 +38,7 @@ data "archive_file" "cardalog_lambda_zip" {
   source_dir  = "../Node/cardalog_data_reader"  # Path to the directory containing your Lambda function code
 }
 
-resource "aws_s3_bucket_object" "cardalog_lambda_zip_object" {
+resource "aws_s3_object" "cardalog_lambda_zip_object" {
   bucket = aws_s3_bucket.cardalog_lambda_bucket.id
   key    = "cardalog_data_reader.zip"
   source = data.archive_file.cardalog_lambda_zip.output_path
@@ -117,4 +117,44 @@ EOF
 resource "aws_iam_role_policy_attachment" "cardalog_lambda_policy_attachment" {
   role       = aws_iam_role.cardalog_lambda_role.name
   policy_arn = aws_iam_policy.cardalog_lambda_policy.arn
+}
+
+resource "aws_api_gateway_rest_api" "cardalog_api_getter" {
+  name        = "Cardalog API Get"
+  description = "API Gateway that Gets data from DynamoDB"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_resource" "cardalog_api_getter_resource" {
+  parent_id  = aws_api_gateway_rest_api.cardalog_api_getter.root_resource_id
+  path_part  = "cardalog_api_getter_resource"
+  rest_api_id = aws_api_gateway_rest_api.cardalog_api_getter.id
+}
+
+resource "aws_api_gateway_method" "cardalog_api_getter_method" {
+  rest_api_id   = aws_api_gateway_rest_api.cardalog_api_getter.id
+  resource_id   = aws_api_gateway_resource.cardalog_api_getter_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "cardalog_api_getter_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.cardalog_api_getter.id
+  resource_id             = aws_api_gateway_resource.cardalog_api_getter_resource.id
+  http_method             = aws_api_gateway_method.cardalog_api_getter_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.cardalog_data_reader.invoke_arn
+}
+
+resource "aws_lambda_permission" "cardalog_api_lambda_invoke_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cardalog_data_reader.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.cardalog_api_getter.execution_arn}/*/*"
 }

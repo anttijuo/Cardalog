@@ -14,10 +14,6 @@ resource "aws_s3_bucket" "cardalog-picture-bucket" {
 
   acl    = "private"  # Access Control List for the bucket, you can change it as needed
 
-  versioning {
-    enabled = false  # enable versioning for the bucket
-  }
-
   tags = {
     Name        = "CardBucket"
     Environment = "Development"
