@@ -51,7 +51,14 @@ aws configure
 
 # Terraform
 
-## Initialize Terraform resources:
+NOTE:
+The ftState file is stored remotely in an S3 Bucket.
+This enables sharing state between multiple machines.
+HOWEVER
+This means that the name of the bucket in main.tf needs to added manually for
+the 'backend' section, as terraform does not allow variables here.
+
+## Initialize Terraform resources (first time):
 
 1. Open Command Line/Command Prompt
 2. Navigate to Terraform/ directory
