@@ -67,6 +67,20 @@ the 'backend' section, as terraform does not allow variables here.
 terraform init
 ```
 
+## Pull Terraform state
+
+NOTE:
+Do this each time a different machine has used terraform commands to update the state in remote
+This will make sure that all machines share the correct state
+If using only one machine, pulling state is usually not needed (unless project files have been removed and recreated)
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform state pull
+```
+
 ## Check Terraform changes before updating:
 
 1. Open Command Line/Command Prompt
@@ -88,4 +102,13 @@ terraform apply
 4. When prompted, input:
 ```
 yes
+```
+
+## Update Terraform state to remote
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform init -migrate-state
 ```
