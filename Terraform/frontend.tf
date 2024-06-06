@@ -8,18 +8,30 @@ resource "random_pet" "frontend_bucket_suffix" {
   separator = "-"
 }
 
-resource "aws_s3_bucket" "cardalog_html_bucket" {
-  bucket = "cardalog-html-bucket-${random_pet.lambda_bucket_suffix.id}"
+resource "aws_s3_bucket_website_configuration" "cardalog_html_bucket" {
+  bucket = "cardalog-html-bucket-${random_pet.frontend_bucket_suffix.id}"
   acl    = "public-read"
 
-  website {
-    index_document = "index.html"
-    #error_document = "error.html"
+  index_document {
+    suffix = "index.html"
+  }
+
+  #error_document {
+  #  key = "error.html"
+  #}
+
+  routing_rule {
+    condition {
+      key_prefix_equals = "docs/"
+    }
+    redirect {
+      replace_key_prefix_with = "documents/"
+    }
   }
 }
 
-resource "aws_s3_bucket_object" "cardalog_index_html" {
-  bucket = aws_s3_bucket.cardalog_html_bucket.bucket
+resource "aws_s3_object" "cardalog_index_html" {
+  bucket = aws_s3_bucket_website_configuration.cardalog_html_bucket.bucket
   key    = "index.html"
   source = "../Frontend/index.html"
   acl    = "public-read"
@@ -36,7 +48,7 @@ resource "aws_s3_bucket_object" "cardalog_index_html" {
 #}
 
 resource "aws_s3_bucket_policy" "cardalog_html_bucket_policy" {
-  bucket = aws_s3_bucket.cardalog_html_bucket.id
+  bucket = aws_s3_bucket_website_configuration.cardalog_html_bucket.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -45,7 +57,7 @@ resource "aws_s3_bucket_policy" "cardalog_html_bucket_policy" {
         Effect = "Allow",
         Principal = "*",
         Action = "s3:GetObject",
-        Resource = "${aws_s3_bucket.cardalog_html_bucket.arn}/*"
+        Resource = "${aws_s3_bucket_website_configuration.cardalog_html_bucket.id}/*"
       }
     ]
   })
@@ -57,8 +69,8 @@ resource "aws_cloudfront_origin_access_identity" "cardalog_origin_access_identit
 
 resource "aws_cloudfront_distribution" "cardalog_s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.cardalog_html_bucket.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.cardalog_html_bucket.bucket
+    domain_name = aws_s3_bucket_website_configuration.cardalog_html_bucket.website_domain
+    origin_id   = aws_s3_bucket_website_configuration.cardalog_html_bucket.bucket
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.cardalog_origin_access_identity.cloudfront_access_identity_path
@@ -72,7 +84,7 @@ resource "aws_cloudfront_distribution" "cardalog_s3_distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.cardalog_html_bucket.bucket
+    target_origin_id = aws_s3_bucket_website_configuration.cardalog_html_bucket.bucket
 
     forwarded_values {
       query_string = false
@@ -99,7 +111,7 @@ resource "aws_cloudfront_distribution" "cardalog_s3_distribution" {
 }
 
 output "s3_website_url" {
-  value = aws_s3_bucket.cardalog_html_bucket.website_endpoint
+  value = aws_s3_bucket_website_configuration.cardalog_html_bucket.website_endpoint
 }
 
 output "cloudfront_url" {

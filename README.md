@@ -55,7 +55,7 @@ NOTE:
 The ftState file is stored remotely in an S3 Bucket.
 This enables sharing state between multiple machines.
 HOWEVER
-This means that the name of the bucket in main.tf needs to added manually for
+This means that the name of the bucket in remotestate.tf needs to added manually for
 the 'backend' section, as terraform does not allow variables here.
 
 ## Initialize Terraform resources (first time):
@@ -106,9 +106,16 @@ yes
 
 ## Update Terraform state to remote
 
+NOTE:
+IF using remote state in S3, ALWAYS update state with this command to remote after calling terraform apply
+
 1. Open Command Line/Command Prompt
-2. Navigate to Terraform/ directory
-3. Call:
+2. Navigate to Terraform/remote-state directory
+3. If first-time run, call:
+```
+terraform apply
+```
+4. To update state to remote, call:
 ```
 terraform init -migrate-state
 ```
