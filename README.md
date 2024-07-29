@@ -119,3 +119,16 @@ terraform apply
 ```
 terraform init -migrate-state
 ```
+
+## Remove all resources created with Terraform
+
+1. Open Command Line/Command Prompt
+2. Navigate to Terraform/ directory
+3. Call:
+```
+terraform destroy
+```
+4. When prompted, input:
+```
+yes
+```
